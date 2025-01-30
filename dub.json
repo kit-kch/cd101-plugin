@@ -1,0 +1,81 @@
+{
+    "name": "template",
+
+    "license":                 "public domain",
+    "copyright":               "none",
+
+    "importPaths":             [ "source" ],
+    "sourcePaths":             [ "source" ],
+    "stringImportPaths":       [ "gfx", "." ],
+    "targetPath":              "builds/dub",
+
+    "dflags-linux-dmd":        [ "-defaultlib=libphobos2.a" ],
+    "dflags-osx-ldc":          [ "-static" ],
+    "dflags-linux-ldc":        [ "-link-defaultlib-shared=false" ],
+    "dflags-linux-x86_64-ldc": [ "-fvisibility=hidden" ],
+    "dflags-windows-ldc":      [ "-mscrtlib=libcmt",
+                                 "-fvisibility=hidden",
+                                 "-link-defaultlib-shared=false" ],
+    "libs": ["ftdi1"],
+
+    "dependencies":
+    {
+        "dplug:gui":           "~>15.0",
+        "dplug:dsp":           "~>15.0",
+        "dplug:flat-widgets":  "~>15.0",
+        "dplug:vst3":          "~>15.0",
+        "dplug:au":            "~>15.0",
+        "dplug:clap":          "~>15.0"
+    },
+
+    "targetType": "dynamicLibrary",
+
+    "configurations": [
+        {
+            "name": "CLAP",
+            "versions": [ "CLAP" ],
+            "lflags-osx-ldc": [
+                "-exported_symbols_list",
+                "$PACKAGE_DIR/source/module-clap.lst",
+                "-dead_strip"
+            ],
+            "lflags-linux-ldc": [
+                "--version-script=$PACKAGE_DIR/source/module-clap.ver"
+            ]
+        },
+        {
+            "name": "VST3",
+            "versions": [ "VST3" ],
+            "lflags-osx-ldc": [
+                "-exported_symbols_list",
+                "$PACKAGE_DIR/source/module-vst3.lst",
+                "-dead_strip"
+            ],
+            "lflags-linux-ldc": [
+                "--version-script=$PACKAGE_DIR/source/module-vst3.ver"
+            ]
+        },
+        {
+            "name": "LV2",
+            "versions": ["LV2"],
+            "targetType": "dynamicLibrary",
+            "lflags-osx-ldc": [
+                "-exported_symbols_list",
+                "$PACKAGE_DIR/source/module-lv2.lst",
+                "-dead_strip"
+            ],
+            "lflags-linux-ldc": [
+                "--version-script=$PACKAGE_DIR/source/module-lv2.ver"
+            ]
+        },
+        {
+            "name": "AU",
+            "versions": [ "AU" ],
+            "lflags-osx-ldc": [
+                "-exported_symbols_list",
+                "$PACKAGE_DIR/source/module-au.lst",
+                "-dead_strip"
+            ]
+        }
+    ]
+}

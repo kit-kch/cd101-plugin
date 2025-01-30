@@ -1,0 +1,16 @@
+{
+    "$schema": "https://raw.githubusercontent.com/AuburnSounds/dplug/master/plugin-schema.json",
+    "vendorName": "KCH",
+    "vendorUniqueID": "KCHD",
+    "vendorSupportEmail": "info@kch.dev",
+    "pluginName": "CD101 Synth",
+    "pluginHomepage": "https://kch.dev/cd101",
+    "pluginUniqueID": "cd10",
+    "publicVersion": "0.0.1",
+    "CFBundleIdentifierPrefix": "dev.kch",
+    "licensePath": "license.md",
+    "hasGUI": true,
+    "isSynth": true,
+    "receivesMIDI": true,
+    "category": "instrumentSynthesizer"
+}
