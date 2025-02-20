@@ -77,8 +77,8 @@ nothrow:
         float S = W / cast(float)(context.getDefaultUIWidth());
 
         _attackKnob.position  = rectangle(70, 101, 128, 128).scaleByFactor(S);
-        _decayKnob.position   = rectangle(308, 101, 128, 128).scaleByFactor(S);
-        _sustainKnob.position = rectangle(70, 320, 128, 128).scaleByFactor(S);
+        _sustainKnob.position   = rectangle(308, 101, 128, 128).scaleByFactor(S);
+        _decayKnob.position = rectangle(70, 320, 128, 128).scaleByFactor(S);
         _releaseKnob.position = rectangle(308, 320, 128, 128).scaleByFactor(S);
         _filterKnob.position  = rectangle(70, 539, 128, 128).scaleByFactor(S);
     }

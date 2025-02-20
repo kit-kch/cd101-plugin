@@ -45,23 +45,30 @@ struct SynthConfig
 
     void setFilterD(double a) nothrow @nogc
     {
-        this.filter_a = cast(uint8_t)(a * 0xff);
-        this.filter_b = 0xff-this.filter_a;
+        this.setFilterA(cast(uint8_t)(a * 0xff));
     }
 
-    // FIXME: Not working
+    /**
+     * Note: Even for f=fs/2, this will only set the coefficient to
+     * 0.83... which is mathematically corrent. If you want to use higher values,
+     * Use setFilterD
+     */
     void setFilterHz(uint16_t hz) nothrow @nogc
     {
         // https://dsp.stackexchange.com/a/54088
-        double y = 1 - cos(2 * PI * hz);
+        double f = hz;
+        const fs = 40000;
+        auto wc = (f / fs) * 2 * PI;
+        double y = 1 - cos(wc);
         double val = -y + sqrt(y*y + 2 * y);
+
         this.setFilterD(val);
     }
 
     void setADSR(double aMS, double dMS, double s, double rMS) nothrow @nogc
     {
-        // One step takes this time (in ms)
-        double stepMS = (512.0 / (40000.0)) * 1000;
+        // One step takes this time (in ms): 3.2ms
+        double stepMS = (128.0 / (40000.0)) * 1000;
 
         size_t aSteps = cast(size_t)(aMS / stepMS);
         aSteps = max(aSteps, 1);
@@ -163,8 +170,8 @@ public:
         if (ftdi_write_data(&_ftdi, buf.ptr, buf.length) != buf.length)
             return false;
 
-        // To ensure proper reset, nSS must be low for at least 12.5ms
-        usleep(12500);
+        // To ensure proper reset, nSS must be low for at least 3.125ms
+        usleep(3125);
 
         uint8_t[3] buf2 = [
             SET_BITS_LOW, (1 << PIN_NSS), OUTPUT_PINMASK //nSS high

@@ -78,13 +78,13 @@ nothrow:
     // Caution when adding parameters: always add the indices
     // in the same order as the parameter enum.
     override Parameter[] buildParameters()
-    {
+    {   
         auto params = makeVec!Parameter();
-        params ~= mallocNew!LinearFloatParameter(paramAttack, "attack", "%", 0.0f, 100.0f, 10.0f) ;
-        params ~= mallocNew!LinearFloatParameter(paramDecay, "decay", "%", 0.0f, 100.0f, 30.0f) ;
-        params ~= mallocNew!LinearFloatParameter(paramSustain, "sustain", "%", 0.0f, 100.0f, 40.0f) ;
-        params ~= mallocNew!LinearFloatParameter(paramRelease, "release", "%", 0.0f, 100.0f, 30.0f) ;
-        params ~= mallocNew!LinearFloatParameter(paramFilter, "filter", "%", 0.0f, 100.0f, 0.0f) ;
+        params ~= mallocNew!LinearFloatParameter(paramAttack, "attack", "ms", 3.2f, 409.6f, 10.0f) ;
+        params ~= mallocNew!LinearFloatParameter(paramDecay, "decay", "ms", 3.2f, 409.6, 30.0f) ;
+        params ~= mallocNew!LinearFloatParameter(paramSustain, "sustain", "%", 0.0, 100.0f, 20.0f) ;
+        params ~= mallocNew!LinearFloatParameter(paramRelease, "release", "ms", 3.2f, 409.6f, 100.0f) ;
+        params ~= mallocNew!LinearFloatParameter(paramFilter, "filter", "Hz", 0.0f, 20000.0f, 1000.0f) ;
         return params.releaseData();
     }
 
@@ -163,14 +163,16 @@ nothrow:
         return result;
     }
 
-    // FIXME: Writeconfig stalls for 12.5ms. Split into two calls
+    // FIXME: Writeconfig stalls for 3.125ms. Split into two calls
     void updateConfig(SynthParams params) @nogc nothrow
     {
         SynthConfig cfg;
         cfg.trigger = _trigger;
         cfg.setOscillatorHz(cast(ushort)convertMIDINoteToFrequency(params.noteNumber));
-        cfg.setFilterD(params.filter / 100.0);
-        cfg.setADSR((params.a / 100.0) * 5000, (params.d / 100.0) * 5000, params.s / 100.0, (params.r / 100.0) * 5000);
+        cfg.setFilterHz(cast(ushort)params.filter);
+        cfg.setADSR(params.a, params.d, params.s / 100.0, params.r);
+        fprintf(_fp, "Config: %d %d %d %d %d %d %d\n", cfg.adsr_ai, cfg.adsr_di, cfg.adsr_s, cfg.adsr_ri, cfg.osc_count, cfg.filter_a, cfg.filter_b);
+        fflush(_fp);
         if (_spiOK)
             _spi.writeConfig(cfg);
         _lastParams = params;
