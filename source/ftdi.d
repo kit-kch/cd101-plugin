@@ -1,6 +1,6 @@
 import std.math;
 import core.stdc.stdint;
-import std.algorithm : max;
+import std.algorithm : max, min;
 import core.sys.posix.unistd;
 
 // UM232H development module
@@ -33,8 +33,16 @@ struct SynthConfig
 
     void setOscillatorHz(uint16_t hz) nothrow @nogc
     {
+        // Pulse:
+        /*
         this.osc_count = 40000 / (2*hz);
         this.osc_count = max(cast(ushort)1, this.osc_count);
+        */
+
+        // Rectangle:
+        this.osc_count = (hz * 4096) / 40000;
+        this.osc_count = max(cast(ushort)1, this.osc_count);
+        this.osc_count = min(cast(ushort)4096, this.osc_count);
     }
 
     void setFilterA(uint8_t a)  nothrow @nogc
