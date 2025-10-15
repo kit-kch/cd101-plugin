@@ -119,7 +119,7 @@ nothrow:
         {
             if (msg.isNoteOn())
             {
-                fprintf(_fp, "Note on\n");
+                fprintf(_fp, "Note on (SPI %s)\n", _spiOK ? "OK" : "FAIL");
                 fflush(_fp);
                 params.noteNumber = msg.noteNumber;
                 updateCfg = (params != _lastParams);
@@ -132,7 +132,7 @@ nothrow:
             }
             else if (msg.isNoteOff() || msg.isAllNotesOff() || msg.isAllSoundsOff())
             {
-                fprintf(_fp, "Note off\n");
+                fprintf(_fp, "Note off (SPI %s)\n", _spiOK ? "OK" : "FAIL");
                 fflush(_fp);
                 _trigger = false;
                 if (updateCfg)
@@ -171,7 +171,7 @@ nothrow:
         cfg.setOscillatorHz(cast(ushort)convertMIDINoteToFrequency(params.noteNumber));
         cfg.setFilterHz(cast(ushort)params.filter);
         cfg.setADSR(params.a, params.d, params.s / 100.0, params.r);
-        fprintf(_fp, "Config: %d %d %d %d %d %d %d\n", cfg.adsr_ai, cfg.adsr_di, cfg.adsr_s, cfg.adsr_ri, cfg.osc_count, cfg.filter_a, cfg.filter_b);
+        fprintf(_fp, "Config: %d %d %d %d %d %d %d (SPI %s)\n", cfg.adsr_ai, cfg.adsr_di, cfg.adsr_s, cfg.adsr_ri, cfg.osc_count, cfg.filter_a, cfg.filter_b, _spiOK ? "OK" : "FAIL");
         fflush(_fp);
         if (_spiOK)
             _spi.writeConfig(cfg);
@@ -180,6 +180,8 @@ nothrow:
 
     void updateTrigger() @nogc nothrow
     {
+        fprintf(_fp, "updateTrigger (SPI %s)\n", _spiOK ? "OK" : "FAIL");
+        fflush(_fp);
         if (_spiOK)
             auto result = _spi.writeTrigger(_trigger);
     }
