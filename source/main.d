@@ -65,6 +65,15 @@ nothrow:
         fflush(_fp);
     }
 
+    ~this()
+    {
+        _spi.close();
+        _spiOK = false;
+        fprintf(_fp, "Plugin terminating\n");
+        fflush(_fp);
+        fclose(_fp);
+    }
+
     override PluginInfo buildPluginInfo()
     {
         // Plugin info is parsed from plugin.json here at compile time.
