@@ -1,5 +1,5 @@
 {
-    "name": "template",
+    "name": "cd101-gui",
 
     "license":                 "public domain",
     "copyright":               "none",
@@ -25,7 +25,8 @@
         "dplug:flat-widgets":  "~>15.0",
         "dplug:vst3":          "~>15.0",
         "dplug:au":            "~>15.0",
-        "dplug:clap":          "~>15.0"
+        "dplug:clap":          "~>15.0",
+        "dplug:lv2":           "~>15.0",
     },
 
     "targetType": "dynamicLibrary",
