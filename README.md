@@ -94,3 +94,4 @@ Then just open your DAW, add the plugin and enable midi inputs to the plugin to 
 
 Note that the plugin does currently not report whether it successfully opened the USB device.
 If it could not do that for some reason, it will simply do nothing.
+You can have a look at the `debug.txt` file to get some information what bit is doing.
