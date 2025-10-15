@@ -18,6 +18,7 @@ This pin mapping matches the pinout of the CD101 FPGA firmware on the [UPduino 3
 This was last tested on Fedora 42. First install some system packages:
 
 ```bash
+sudo dnf install gcc libftdi-devel libX11-devel
 ```
 
 Then install the D compiler and package manager:
